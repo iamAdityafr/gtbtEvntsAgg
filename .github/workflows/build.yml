@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
+        
+      - name: install dep
+        run: go mod tidy
+
+      - name: Build binary
+        run: go build -o app .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-binary
+          path: app
+
