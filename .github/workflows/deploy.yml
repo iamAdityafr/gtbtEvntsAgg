@@ -1,0 +1,33 @@
+name: dockerDeploy
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: checking out code
+              uses: actions/checkout@v4
+
+            - name: setting up go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: "1.25"
+
+            - name: building go binary
+              run: GOOS=linux go build -o app .
+
+            - name: Login to dockerhub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+            - name: Build and Push
+              run: |
+                  docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/testproject:${{github.sha}} .
+                  docker push ${{ secrets.DOCKERHUB_USERNAME }}/testproject:${{github.sha}}
