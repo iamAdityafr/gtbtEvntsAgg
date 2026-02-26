@@ -1,30 +1,30 @@
 name: GithubRelease
 
 on:
-    push:
-        tags:
-            - "v*"
+  push:
+    tags:
+      - "v*"
 
 permissions:
-    contents: write
+  contents: write
 
 jobs:
-    release:
-        runs-on: ubuntu-latest
+  release:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: checkout
-              uses: actions/checkout@v5
+    steps:
+      - name: checkout
+        uses: actions/checkout@v5
 
-            - name: setup go
-              uses: actions/setup-go@v5
-              with:
-                go-version: "1.25"
-            
-            - name: build binary
-              run: GOOS=linux go build -o app .
+      - name: setup go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
 
-            - name: Crate github release
-              uses: softprops/action-gh-release@v2
-              with:
-                files: app
+      - name: build binary
+        run: GOOS=linux go build -o app ./cmd
+
+      - name: Crate github release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app
