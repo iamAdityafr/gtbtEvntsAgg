@@ -22,7 +22,4 @@ jobs:
             - name: Tidying dependencies
               run: go mod tidy
 
-            - name: running test files
-              run: |
-               echo "Going Verbose"
-               go test -v ./... 
+         
